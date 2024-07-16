@@ -9,8 +9,8 @@ public class ShootingCompetitionApp {
     public static void main(String[] args) {
         try (BufferedReader br = new BufferedReader(new FileReader("SHO.IN"));
              PrintWriter pw = new PrintWriter(new FileWriter("SHO.OUT"))) {
-            log.info("Files access pass");
             solve(br, pw);
+            log.info("Files access pass");
         } catch (IOException e) {
             log.error("I/O Error: ", e);
         }
