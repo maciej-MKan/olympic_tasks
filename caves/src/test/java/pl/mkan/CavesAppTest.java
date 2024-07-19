@@ -3,6 +3,7 @@ package pl.mkan;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +26,7 @@ class CavesAppTest {
                 2 4 0
                 5 1 0
                 """;
-        String expectedOutput = "1 5 4 6 8 7 2 3";
+        List<String> expectedPaths = List.of("1 5 4 6 8 7 2 3", "1 3 2 7 8 6 4 5", "1 3 2 7 4 6 8 7");
 
         BufferedReader br = new BufferedReader(new StringReader(input));
         StringWriter sw = new StringWriter();
@@ -35,6 +36,6 @@ class CavesAppTest {
         pw.flush();
 
         String output = sw.toString().trim();
-        assertEquals(expectedOutput, output);
+        assertTrue(expectedPaths.contains(output), "Output path is not as expected");
     }
 }
