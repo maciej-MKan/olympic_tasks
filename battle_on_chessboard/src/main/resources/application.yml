@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: battle_on_chessboard
+  datasource:
+    url: jdbc:h2:mem:battle_persistence
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+settings:
+  board:
+    width: 10
+    height: 10
+  unit:
+    archer:
+      count: 4
+    cannon:
+      count: 2
+    transport:
+      count: 5

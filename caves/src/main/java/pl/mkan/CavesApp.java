@@ -29,11 +29,11 @@ public class CavesApp {
 
         for (int i = 0; i < (3 * n) / 2; i++) {
             String[] line = br.readLine().split(" ");
-            int a = Integer.parseInt(line[0]);
-            int b = Integer.parseInt(line[1]);
-            int c = Integer.parseInt(line[2]);
-            graph[a].add(new Edge(b, c));
-            graph[b].add(new Edge(a, c));
+            int startNode = Integer.parseInt(line[0]);
+            int endNode = Integer.parseInt(line[1]);
+            int difficulty = Integer.parseInt(line[2]);
+            graph[startNode].add(new Edge(endNode, difficulty));
+            graph[endNode].add(new Edge(startNode, difficulty));
         }
 
         for (int i = 1; i <= n; i++) {
