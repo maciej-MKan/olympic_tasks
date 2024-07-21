@@ -1,11 +1,9 @@
 package pl.mkan.battle_on_chessboard.persistence.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pl.mkan.battle_on_chessboard.controller.dto.Color;
 
 @Entity
 @Getter
@@ -14,12 +12,20 @@ public class Unit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private UnitType type;
+    @Enumerated(EnumType.STRING)
+    private Color color;
     private int x;
     private int y;
     private String status;
     private int moves;
 
-    // getters and setters
+    @Version
+    private int version;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 }
 
