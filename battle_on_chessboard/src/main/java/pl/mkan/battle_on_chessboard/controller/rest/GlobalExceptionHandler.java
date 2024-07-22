@@ -22,6 +22,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ExceptionDTO> handleIllegalStateException(IllegalStateException ex) {
+        ExceptionDTO response = new ExceptionDTO(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDTO> handleGeneralException(Exception ex) {
         ExceptionDTO response = new ExceptionDTO("An unexpected error occurred: " + ex.getMessage());
