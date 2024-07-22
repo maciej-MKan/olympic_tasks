@@ -15,7 +15,6 @@ import pl.mkan.battle_on_chessboard.service.GameService;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

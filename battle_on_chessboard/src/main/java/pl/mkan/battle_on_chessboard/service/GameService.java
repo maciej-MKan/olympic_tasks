@@ -30,23 +30,17 @@ public class GameService {
     private final UnitRepository unitRepository;
     private final CommandHistoryRepository commandHistoryRepository;
     private final GameMapper gameMapper;
-
+    private final Object lock = new Object();
     @Value("${settings.board.width}")
     private int boardWidth;
-
     @Value("${settings.board.height}")
     private int boardHeight;
-
     @Value("${settings.unit.archer.count}")
     private int archerCount;
-
     @Value("${settings.unit.cannon.count}")
     private int cannonCount;
-
     @Value("${settings.unit.transport.count}")
     private int transportCount;
-
-    private final Object lock = new Object();
 
     @Transactional
     public GameDTO startNewGame() {
@@ -124,7 +118,7 @@ public class GameService {
     private void processArcherCommand(Unit unit, String command, String direction, int distance) {
         switch (command.toLowerCase()) {
             case "move" -> {
-                moveUnit(unit, direction, 1);
+                moveUnit(unit, direction, distance);
                 unit.setMoves(unit.getMoves() + 1);
             }
             case "shoot" -> {
