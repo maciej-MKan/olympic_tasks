@@ -16,8 +16,10 @@ import pl.mkan.battle_on_chessboard.service.mapper.GameMapper;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -244,5 +246,35 @@ public class GameService {
         history.setDistance(distance);
         history.setCommandTime(LocalDateTime.now());
         commandHistoryRepository.save(history);
+    }
+
+    @Transactional
+    public void executeRandomCommand(Long gameId, Long unitId, Color color) {
+        synchronized (lock) {
+            Unit unit = unitRepository.findByIdAndGameIdAndColor(unitId, gameId, color)
+                    .orElseThrow(() -> new EntityNotFoundException("Unit not found"));
+
+            List<String> commands = unit.getType() == UnitType.ARCHER ? Arrays.asList("move", "shoot") : List.of("move");
+            String command = getRandomElement(commands);
+
+            List<String> directions = Arrays.asList("up", "down", "left", "right");
+            String direction = getRandomElement(directions);
+
+            int distance = command.equals("shoot") ? ThreadLocalRandom.current().nextInt(1, 4) : 1;
+            if (unit.getType() == UnitType.TRANSPORT) {
+                distance = ThreadLocalRandom.current().nextInt(1, 4);
+            }
+
+            // Process the random command
+            processCommand(unit, command, direction, distance);
+
+            // Save the updated unit
+            unitRepository.save(unit);
+        }
+    }
+
+    private <T> T getRandomElement(List<T> list) {
+        Random random = new Random();
+        return list.get(random.nextInt(list.size()));
     }
 }

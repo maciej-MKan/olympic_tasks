@@ -33,4 +33,13 @@ public class GameController {
         gameService.executeCommand(gameId, unitId, color, command, direction, distance);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{gameId}/unit/{unitId}/random-command")
+    public ResponseEntity<Void> executeRandomCommand(
+            @PathVariable Long gameId,
+            @PathVariable Long unitId,
+            @RequestParam Color color) {
+        gameService.executeRandomCommand(gameId, unitId, color);
+        return ResponseEntity.ok().build();
+    }
 }
