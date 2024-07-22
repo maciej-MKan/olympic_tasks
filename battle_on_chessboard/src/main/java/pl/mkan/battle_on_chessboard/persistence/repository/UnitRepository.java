@@ -3,7 +3,7 @@ package pl.mkan.battle_on_chessboard.persistence.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.mkan.battle_on_chessboard.controller.dto.Color;
-import pl.mkan.battle_on_chessboard.persistence.entity.Unit;
+import pl.mkan.battle_on_chessboard.persistence.model.Unit;
 
 import java.util.List;
 import java.util.Optional;

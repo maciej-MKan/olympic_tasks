@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import pl.mkan.battle_on_chessboard.controller.dto.Color;
 import pl.mkan.battle_on_chessboard.controller.dto.GameDTO;
 import pl.mkan.battle_on_chessboard.controller.dto.UnitDTO;
-import pl.mkan.battle_on_chessboard.persistence.entity.Unit;
+import pl.mkan.battle_on_chessboard.persistence.model.Unit;
 import pl.mkan.battle_on_chessboard.persistence.repository.UnitRepository;
 import pl.mkan.battle_on_chessboard.service.GameService;
 
@@ -61,11 +61,14 @@ public class GameServiceTests {
 
         assertNotNull(archer);
 
+        int originalX = archer.x();
+        int expectedX = originalX + 1 < 10 ? originalX + 1 : 9;
+
         gameService.executeCommand(game.id(), archer.id(), Color.WHITE, "move", "right", 1);
 
         Unit updatedArcher = unitRepository.findById(archer.id()).orElse(null);
 
         assertNotNull(updatedArcher);
-        assertEquals(archer.x() + 1, updatedArcher.getX());
+        assertEquals(expectedX, updatedArcher.getX());
     }
 }

@@ -3,8 +3,8 @@ package pl.mkan.battle_on_chessboard.service.mapper;
 import org.springframework.stereotype.Component;
 import pl.mkan.battle_on_chessboard.controller.dto.GameDTO;
 import pl.mkan.battle_on_chessboard.controller.dto.UnitDTO;
-import pl.mkan.battle_on_chessboard.persistence.entity.Game;
-import pl.mkan.battle_on_chessboard.persistence.entity.Unit;
+import pl.mkan.battle_on_chessboard.persistence.model.Game;
+import pl.mkan.battle_on_chessboard.persistence.model.Unit;
 
 import java.util.List;
 import java.util.stream.Collectors;

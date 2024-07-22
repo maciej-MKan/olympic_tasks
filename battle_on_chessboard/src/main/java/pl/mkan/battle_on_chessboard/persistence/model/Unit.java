@@ -1,9 +1,11 @@
-package pl.mkan.battle_on_chessboard.persistence.entity;
+package pl.mkan.battle_on_chessboard.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.mkan.battle_on_chessboard.controller.dto.Color;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,6 +22,7 @@ public class Unit {
     private int y;
     private String status;
     private int moves;
+    private LocalDateTime lastCommandTime;
 
     @Version
     private int version;

@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import pl.mkan.battle_on_chessboard.controller.dto.Color;
 import pl.mkan.battle_on_chessboard.controller.dto.GameDTO;
 import pl.mkan.battle_on_chessboard.controller.dto.UnitDTO;
-import pl.mkan.battle_on_chessboard.persistence.entity.Game;
-import pl.mkan.battle_on_chessboard.persistence.entity.Unit;
-import pl.mkan.battle_on_chessboard.persistence.entity.UnitStatus;
-import pl.mkan.battle_on_chessboard.persistence.entity.UnitType;
+import pl.mkan.battle_on_chessboard.persistence.model.*;
+import pl.mkan.battle_on_chessboard.persistence.repository.CommandHistoryRepository;
 import pl.mkan.battle_on_chessboard.persistence.repository.GameRepository;
 import pl.mkan.battle_on_chessboard.persistence.repository.UnitRepository;
 import pl.mkan.battle_on_chessboard.service.mapper.GameMapper;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -26,6 +26,7 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UnitRepository unitRepository;
+    private final CommandHistoryRepository commandHistoryRepository;
     private final GameMapper gameMapper;
 
     @Value("${settings.board.width}")
@@ -74,6 +75,7 @@ public class GameService {
             unit.setY(random.nextInt(boardHeight));
             unit.setStatus(UnitStatus.ACTIVE.name());
             unit.setMoves(0);
+            unit.setLastCommandTime(LocalDateTime.now().minusDays(1));
             unit.setGame(game);
             unitRepository.save(unit);
         }
@@ -93,11 +95,19 @@ public class GameService {
             Unit unit = unitRepository.findByIdAndGameIdAndColor(unitId, gameId, color)
                     .orElseThrow(() -> new EntityNotFoundException("Unit not found"));
 
+            if (!canExecuteCommand(unit, command)) {
+                throw new IllegalStateException("Cannot execute command yet, please wait.");
+            }
+
             // Process the command
             processCommand(unit, command, direction, distance);
 
             // Save the updated unit
+            unit.setLastCommandTime(LocalDateTime.now());
             unitRepository.save(unit);
+
+            // Save command history
+            saveCommandHistory(gameId, unitId, color, command, direction, distance);
         }
     }
 
@@ -166,6 +176,11 @@ public class GameService {
             case "left" -> unit.setX(Math.max(0, unit.getX() - distance));
             case "right" -> unit.setX(Math.min(boardWidth - 1, unit.getX() + distance));
         }
+
+        if (unit.getX() < 0) unit.setX(0);
+        if (unit.getX() >= boardWidth) unit.setX(boardWidth - 1);
+        if (unit.getY() < 0) unit.setY(0);
+        if (unit.getY() >= boardHeight) unit.setY(boardHeight - 1);
     }
 
     private boolean isEnemyUnitAtPosition(Unit unit, int x, int y) {
@@ -207,5 +222,27 @@ public class GameService {
         targetY = Math.max(0, Math.min(targetY, boardHeight - 1));
 
         return new int[]{targetX, targetY};
+    }
+
+    private boolean canExecuteCommand(Unit unit, String command) {
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(unit.getLastCommandTime(), now);
+        return switch (command.toLowerCase()) {
+            case "move" -> duration.getSeconds() >= 5;
+            case "shoot" -> duration.getSeconds() >= 10;
+            default -> false;
+        };
+    }
+
+    private void saveCommandHistory(Long gameId, Long unitId, Color color, String command, String direction, int distance) {
+        CommandHistory history = new CommandHistory();
+        history.setGameId(gameId);
+        history.setUnitId(unitId);
+        history.setColor(color);
+        history.setCommand(command);
+        history.setDirection(direction);
+        history.setDistance(distance);
+        history.setCommandTime(LocalDateTime.now());
+        commandHistoryRepository.save(history);
     }
 }
