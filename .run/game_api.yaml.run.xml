@@ -1,0 +1,25 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="game_api.yaml" type="SwaggerCodegen" editBeforeRun="true" show_console_on_std_err="false" show_console_on_std_out="false">
+    <option name="allowRunningInParallel" value="false" />
+    <option name="customTemplatesPath" value="" />
+    <option name="envs">
+      <map />
+    </option>
+    <option name="generateToPath" value="$PROJECT_DIR$/shooting_competition/build/generated/sources/annotationProcessor/java/gen" />
+    <option name="generationParameters">
+      <list />
+    </option>
+    <option name="generatorType" value="OPENAPI_GENERATOR_V6" />
+    <option name="jdkPath" value="$APPLICATION_HOME_DIR$/jbr/bin/java" />
+    <option name="language" value="java" />
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" />
+    <option name="projectPathOnTarget" />
+    <option name="selectedOptions">
+      <list />
+    </option>
+    <option name="specificationPath" value="$APPLICATION_CONFIG_DIR$/openApiExport/warpol-openapi_1.yaml" />
+    <option name="workingDirectory" value="$APPLICATION_CONFIG_DIR$/openApiExport" />
+    <method v="2" />
+  </configuration>
+</component>
